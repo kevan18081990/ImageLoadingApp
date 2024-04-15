@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <dimen name="margin_normal">16dp</dimen>
+
+    <dimen name="plant_item_image_height">95dp</dimen>
+
+    <dimen name="card_side_margin">12dp</dimen>
+    <dimen name="card_bottom_margin">26dp</dimen>
+
+<!--    &lt;!&ndash; elevation for Plant Detail toolbar - used to convert to pixels when hiding/showing &ndash;&gt;-->
+<!--    <dimen name="toolbar_elevation">5dp</dimen>-->
+
+<!--    &lt;!&ndash; Plant List Header margin &ndash;&gt;-->
+<!--    <dimen name="header_margin">24dp</dimen>-->
+
+<!--    <dimen name="gallery_header_margin">72dp</dimen>-->
+
+<!--    &lt;!&ndash; minimum height of plant detail page so that the collapsing toolbar can be shown on every page &ndash;&gt;-->
+<!--    <dimen name="plant_description_min_height">555dp</dimen>-->
+
+</resources>

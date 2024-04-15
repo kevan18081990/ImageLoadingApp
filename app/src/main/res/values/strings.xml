@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ImageLoadingApp</string>
+    <string name="gallery_title" translation_description="Title for the photo gallery screen">Photos</string>
+    <string name="item_image_description" translation_description="Accessibility text for each of the plant images shown in the 'My garden' and 'Plant list' screens.">Picture of office</string>
 </resources>

@@ -2,6 +2,15 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="GalleryScreenPreview">
+        <State />
+      </entry>
+      <entry key="GalleryScreenPreview (plantPictures 0)">
+        <State />
+      </entry>
+      <entry key="MainActivity">
+        <State />
+      </entry>
       <entry key="app">
         <State />
       </entry>
