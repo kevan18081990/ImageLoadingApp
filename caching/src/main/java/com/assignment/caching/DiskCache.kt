@@ -10,6 +10,7 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
 class DiskCache(val context: Context) : ImageCache {
+
     private var cache: DiskLruCache =
         DiskLruCache.open(context.cacheDir, 1, 1, 10 * 1024 * 1024)
 

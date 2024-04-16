@@ -2,6 +2,7 @@ package com.assignment.imageloadingapp.ui
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,8 +29,11 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
@@ -53,6 +57,7 @@ import androidx.paging.compose.itemKey
 import com.assignment.ImageUtil
 import com.assignment.caching.CustomCaching
 import com.assignment.imageloadingapp.CustomCachingAsync
+import com.assignment.imageloadingapp.CustomImageLoader
 import com.assignment.imageloadingapp.R
 import com.assignment.imageloadingapp.data.UnsplashPhoto
 import com.assignment.imageloadingapp.data.UnsplashPhotoUrls
@@ -66,6 +71,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.compose.runtime.State
+import com.assignment.exp.ImageLoader
 
 @Composable
 fun GalleryScreen(
@@ -159,9 +166,9 @@ fun PhotoListItem(photo: UnsplashPhoto, onClick: () -> Unit) {
     ImageListItem(name = photo.user.name, imageUrl = photo.urls.thumb, onClick = onClick)
 }
 
-const val cUrl = "https://i.pinimg.com/originals/93/09/77/930977991c52b48e664c059990dea125.jpg"
 @Composable
 fun ImageListItem(name: String, imageUrl: String, onClick: () -> Unit) {
+    val context = LocalContext.current
     Card(
         onClick = onClick,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
@@ -170,14 +177,11 @@ fun ImageListItem(name: String, imageUrl: String, onClick: () -> Unit) {
             .padding(bottom = dimensionResource(id = R.dimen.card_bottom_margin))
     ) {
         Column(Modifier.fillMaxWidth()) {
-            val context = LocalContext.current
-            var imageBitmap : ImageBitmap? = null
-            LaunchedEffect(context) {
-                withContext(Dispatchers.Default){
-                    imageBitmap = CustomCachingAsync(context).getBitmap(cUrl)?.asImageBitmap()
-                }
+            var btmp: ImageBitmap? = null
+            LaunchedEffect(Unit) {
+                btmp = CustomImageLoader.getInstance(context).getBitmap(imageUrl,name)?.asImageBitmap()
             }
-            imageBitmap?.let {
+            btmp?.let {
                 Image(
                     bitmap = it,
                     contentDescription = stringResource(R.string.item_image_description),
@@ -199,4 +203,35 @@ fun ImageListItem(name: String, imageUrl: String, onClick: () -> Unit) {
             )
         }
     }
+}
+
+@Composable
+fun loadNetworkImage(
+    url: String,
+    id: String,
+    imageLoader: ImageLoader = CustomImageLoader.getInstance(LocalContext.current)
+): State<Result<Bitmap>> {
+
+    // Creates a State<T> with Result.Loading as initial value
+    // If either `url` or `imageRepository` changes, the running producer
+    // will cancel and will be re-launched with the new inputs.
+    return produceState<Result<Bitmap>>(initialValue = Result.Loading, url, imageLoader) {
+
+        // In a coroutine, can make suspend calls
+        val bitmap = imageLoader.getBitmap(url,id)
+
+        // Update State with either an Error or Success result.
+        // This will trigger a recomposition where this State is read
+        value = if (bitmap == null) {
+            Result.Error
+        } else {
+            Result.Success(bitmap)
+        }
+    }
+}
+
+sealed class Result<out T> {
+    object Loading : Result<Nothing>()
+    object Error : Result<Nothing>()
+    class Success<T>(t: T?) : Result<T>()
 }
