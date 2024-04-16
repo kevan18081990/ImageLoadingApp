@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ImageLoadingApp"
 include(":app")
+include(":caching")
