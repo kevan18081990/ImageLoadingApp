@@ -13,25 +13,20 @@ class CustomCaching private constructor(context: Context, cacheSize: Int) {
         Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
     private val mRunningDownloadList: HashMap<String, Future<Bitmap?>> = hashMapOf()
 
-    fun displayImage(
-        url: String, imageview: ImageView, placeholder:
-        Int
-    ) {
-        var bitmap = cache.get(url)
+    fun displayImageNew(url: String, setPlaceHolder: () -> Unit, onLoad: (bitmap: Bitmap) -> Unit) {
+        val bitmap = cache.get(url)
         bitmap?.let {
-            imageview.setImageBitmap(it)
+            onLoad(it)
             return
+        } ?: run {
+            setPlaceHolder()
+            addDownloadImageTask(url, DownloadImageTask(url, cache) {
+                onLoad(it)
+            })
         }
-            ?: run {
-                imageview.tag = url
-                imageview.setImageResource(placeholder)
-                addDownloadImageTask(url, DownloadImageTask(url, imageview, cache))
-            }
-
     }
 
     fun addDownloadImageTask(url: String, downloadTask: DownloadTask<Bitmap?>) {
-
         mRunningDownloadList.put(url, executorService.submit(downloadTask))
     }
 

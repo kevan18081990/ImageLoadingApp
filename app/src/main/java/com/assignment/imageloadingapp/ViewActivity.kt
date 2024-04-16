@@ -1,12 +1,19 @@
 package com.assignment.imageloadingapp
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.assignment.caching.CustomCaching
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ViewActivity : AppCompatActivity() {
 
@@ -25,12 +32,14 @@ class ViewActivity : AppCompatActivity() {
         initViews()
     }
 
-    fun initViews(){
+    fun initViews() {
         val imageView = findViewById<ImageView>(R.id.imageView)
-        imageLoader = CustomCaching.getInstance(this , 4024) //4MiB
-        imageLoader.displayImage(URL1,imageView,R.drawable.ic_launcher_background)
-        imageView.setOnClickListener {
-            imageLoader.clearcache()
+        var imageBitmap: Bitmap? = null
+        CoroutineScope(Dispatchers.Default).launch {
+            imageBitmap = CustomCachingAsync(applicationContext).getBitmap(URL1)
+            withContext(Dispatchers.Main){
+                imageView.setImageBitmap(imageBitmap)
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ data class UnsplashPhoto(
 )
 
 data class UnsplashPhotoUrls(
-    @field:SerializedName("small") val small: String
+    @field:SerializedName("thumb") val thumb: String
 )
 
 data class UnsplashUser(

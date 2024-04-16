@@ -7,10 +7,9 @@ import android.os.Looper
 import java.net.HttpURLConnection
 import java.net.URL
 
-class DownloadImageTask(
+class DownloadImageTaskNew(
     private val url: String,
     private val cache: DiskCache,
-    val onDownload: (bitmap: Bitmap) -> Unit
 ) : DownloadTask<Bitmap?>() {
 
     override fun download(url: String): Bitmap? {
@@ -27,20 +26,11 @@ class DownloadImageTask(
         return bitmap
     }
 
-    private val uiHandler = Handler(Looper.getMainLooper())
-
     override fun call(): Bitmap? {
         val bitmap = download(url)
         bitmap?.let {
-            updateImageView(it)
             cache.put(url, it)
         }
         return bitmap
-    }
-
-    fun updateImageView(bitmap: Bitmap) {
-        uiHandler.post {
-            onDownload(bitmap)
-        }
     }
 }

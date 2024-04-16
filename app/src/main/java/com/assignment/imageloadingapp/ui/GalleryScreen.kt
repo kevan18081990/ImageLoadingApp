@@ -1,6 +1,7 @@
 package com.assignment.imageloadingapp.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,8 +33,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +51,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.assignment.ImageUtil
+import com.assignment.caching.CustomCaching
+import com.assignment.imageloadingapp.CustomCachingAsync
 import com.assignment.imageloadingapp.R
 import com.assignment.imageloadingapp.data.UnsplashPhoto
 import com.assignment.imageloadingapp.data.UnsplashPhotoUrls
@@ -119,7 +124,7 @@ private fun GalleryScreen(
             ) {
                 items(
                     count = pagingItems.itemCount,
-                    key = pagingItems.itemKey { it.id + it.urls.small }
+                    key = pagingItems.itemKey { it.id + it.urls.thumb }
                 ) { index ->
                     val photo = pagingItems[index] ?: return@items
                     PhotoListItem(photo = photo) {
@@ -151,9 +156,10 @@ private fun GalleryTopBar(
 
 @Composable
 fun PhotoListItem(photo: UnsplashPhoto, onClick: () -> Unit) {
-    ImageListItem(name = photo.user.name, imageUrl = photo.urls.small, onClick = onClick)
+    ImageListItem(name = photo.user.name, imageUrl = photo.urls.thumb, onClick = onClick)
 }
 
+const val cUrl = "https://i.pinimg.com/originals/93/09/77/930977991c52b48e664c059990dea125.jpg"
 @Composable
 fun ImageListItem(name: String, imageUrl: String, onClick: () -> Unit) {
     Card(
@@ -164,15 +170,14 @@ fun ImageListItem(name: String, imageUrl: String, onClick: () -> Unit) {
             .padding(bottom = dimensionResource(id = R.dimen.card_bottom_margin))
     ) {
         Column(Modifier.fillMaxWidth()) {
-            var bitmap: ImageBitmap? = null
-            LaunchedEffect(Unit) {
-                // Call the suspend function using launch
-                val result = withContext(Dispatchers.IO) {
-                    ImageUtil.getBitmapFromUrl(imageUrl)
+            val context = LocalContext.current
+            var imageBitmap : ImageBitmap? = null
+            LaunchedEffect(context) {
+                withContext(Dispatchers.Default){
+                    imageBitmap = CustomCachingAsync(context).getBitmap(cUrl)?.asImageBitmap()
                 }
-                bitmap = result
             }
-            bitmap?.let {
+            imageBitmap?.let {
                 Image(
                     bitmap = it,
                     contentDescription = stringResource(R.string.item_image_description),
