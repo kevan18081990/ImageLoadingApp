@@ -7,7 +7,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import com.assignment.caching.DiskCache
 
-class CustomCaching private constructor(context: Context, cacheSize: Int) {
+class CustomCaching constructor(context: Context, cacheSize: Int) {
     private val cache = DiskCache(context)
     private val executorService =
         Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())

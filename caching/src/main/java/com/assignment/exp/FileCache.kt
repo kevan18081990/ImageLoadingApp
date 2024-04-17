@@ -9,13 +9,8 @@ class FileCache(context: Context) {
     private var cacheDir: File? = null
 
     init {
-
-        if (android.os.Environment.getExternalStorageState() == android.os.Environment.MEDIA_MOUNTED)
-            cacheDir = File(android.os.Environment.getExternalStorageDirectory(), "dir")
-        else
-            cacheDir = context.cacheDir
-        if (!cacheDir!!.exists())
-            cacheDir!!.mkdirs()
+        cacheDir = context.cacheDir
+        if (!cacheDir!!.exists()) cacheDir!!.mkdirs()
     }
 
     fun getFile(url: String): File {
