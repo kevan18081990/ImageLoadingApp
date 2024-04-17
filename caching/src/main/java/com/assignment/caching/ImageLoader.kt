@@ -1,9 +1,8 @@
-package com.assignment.exp
+package com.assignment.caching
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.os.Handler
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File

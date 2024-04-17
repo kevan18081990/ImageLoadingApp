@@ -1,14 +1,7 @@
 package com.assignment.imageloadingapp
 
 import android.content.Context
-import android.graphics.Bitmap
-import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import com.assignment.caching.CustomCaching
-import com.assignment.exp.ImageLoader
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
+import com.assignment.caching.ImageLoader
 
 class CustomImageLoader {
     companion object {

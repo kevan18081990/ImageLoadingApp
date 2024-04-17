@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".MainApplication"
@@ -18,14 +17,8 @@
         android:theme="@style/Theme.ImageLoadingApp"
         tools:targetApi="31">
         <activity
-            android:name=".ViewActivity"
-            android:theme="@style/Theme.AppCompat"
-            android:exported="true">
-        </activity>
-        <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.ImageLoadingApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
