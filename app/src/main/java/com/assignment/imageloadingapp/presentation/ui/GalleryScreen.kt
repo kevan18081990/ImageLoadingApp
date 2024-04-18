@@ -135,11 +135,11 @@ private fun GalleryTopBar(
 
 @Composable
 fun PhotoListItem(photo: UnsplashPhoto) {
-    ImageListItem(name = photo.user.name, imageUrl = photo.urls.thumb)
+    ImageListItem(id = photo.id, name = photo.user.name, imageUrl = photo.urls.thumb)
 }
 
 @Composable
-fun ImageListItem(name: String, imageUrl: String) {
+fun ImageListItem(id:String, name: String, imageUrl: String) {
     val context = LocalContext.current
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
@@ -151,7 +151,7 @@ fun ImageListItem(name: String, imageUrl: String) {
             var ib by remember { mutableStateOf<ImageBitmap?>(null) }
             CustomImageLoader.getInstance(context).displayImage(
                 imageUrl,
-                name,
+                id,
                 null
             ) {
                 ib = it.asImageBitmap()
