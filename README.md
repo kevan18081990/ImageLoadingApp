@@ -7,7 +7,8 @@ Android Gradle Plugin version: 8.3.1,
 Gradle version: 8.4,
 Kotlin version: 1.9.22,
 
-**Custom image loading** module is implemented for image loading and caching with the disk and memory caching both.
+**Custom image loading** module is implemented for image loading and caching with the disk and memory caching both. No third party image loading library is used.
+**Pagination** is implemented to load data on scroll to improve performance with **jetpack compose** UI.
 
 ![App Modules](https://github.com/kevan18081990/ImageLoadingApp/assets/8202746/8c015460-28d6-46c3-95e3-743fed6cd8ae)
 
