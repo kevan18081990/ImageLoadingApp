@@ -1,7 +1,6 @@
 [quick.webm](https://github.com/kevan18081990/ImageLoadingApp/assets/8202746/cb2ce4e1-5a94-4895-82ea-df53fc7ba49f)
 
-Installation instructions
-
+Installation instructions:
 This project is built on latest IDE Android Studio Iguana | 2023.2.1 Patch 1
 Using java version: 17.0.9
 Android Gradle Plugin version: 8.3.1
