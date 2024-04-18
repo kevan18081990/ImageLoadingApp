@@ -1,5 +1,6 @@
 package com.assignment.imageloadingapp.presentation.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -77,8 +78,8 @@ private fun GalleryScreen(
         },
     ) { padding ->
 
+        val context = LocalContext.current
         val pullToRefreshState = rememberPullToRefreshState()
-
         if (pullToRefreshState.isRefreshing) {
             onPullToRefresh()
         }
@@ -89,7 +90,10 @@ private fun GalleryScreen(
         LaunchedEffect(pagingItems.loadState) {
             when (pagingItems.loadState.refresh) {
                 is LoadState.Loading -> Unit
-                is LoadState.Error, is LoadState.NotLoading -> {
+                is LoadState.Error -> {
+                    Toast.makeText(context, context.getString(R.string.error_network), Toast.LENGTH_SHORT).show()
+                }
+                is LoadState.NotLoading -> {
                     pullToRefreshState.endRefresh()
                 }
             }
