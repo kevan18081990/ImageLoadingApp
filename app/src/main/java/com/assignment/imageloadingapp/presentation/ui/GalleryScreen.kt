@@ -1,9 +1,11 @@
 package com.assignment.imageloadingapp.presentation.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,7 +49,11 @@ import com.assignment.imageloadingapp.presentation.viewmodel.GalleryViewModel
 import kotlinx.coroutines.flow.Flow
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import com.assignment.imageloadingapp.presentation.ui.theme.Purple80
+import com.assignment.imageloadingapp.presentation.ui.theme.PurpleGrey80
 
 @Composable
 fun GalleryScreen(
@@ -143,7 +149,11 @@ fun ImageListItem(name: String, imageUrl: String) {
     ) {
         Column(Modifier.fillMaxWidth()) {
             var ib by remember { mutableStateOf<ImageBitmap?>(null) }
-            CustomImageLoader.getInstance(context).displayImage(imageUrl,name){
+            CustomImageLoader.getInstance(context).displayImage(
+                imageUrl,
+                name,
+                null
+            ) {
                 ib = it.asImageBitmap()
             }
             ib?.let {
@@ -155,14 +165,12 @@ fun ImageListItem(name: String, imageUrl: String) {
                         .height(dimensionResource(id = R.dimen.plant_item_image_height)),
                     contentScale = ContentScale.Crop
                 )
-            }?: kotlin.run {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = stringResource(R.string.item_image_description),
-                    Modifier
-                        .fillMaxWidth()
-                        .height(dimensionResource(id = R.dimen.plant_item_image_height)),
-                    contentScale = ContentScale.Crop
+            } ?: kotlin.run {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = PurpleGrey80)
+                        .height(dimensionResource(id = R.dimen.plant_item_image_height))
                 )
             }
             Text(

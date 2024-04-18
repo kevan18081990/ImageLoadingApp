@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Handler
+import android.os.Looper
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
 import java.io.FileInputStream
@@ -22,30 +23,30 @@ import kotlin.coroutines.resume
 
 class ImageLoader(context: Context) {
 
-    internal var memoryCache = MemoryCache()
-    internal var fileCache: FileCache
+    private var memoryCache = MemoryCache()
+    private var fileCache = FileCache(context)
     private val imageViewIdMap = Collections.synchronizedMap(WeakHashMap<String, String>())
-    internal var executorService: ExecutorService
-    internal var handler = Handler()
+    private var executorService: ExecutorService = Executors.newFixedThreadPool(5)
+    private var handler = Handler(Looper.getMainLooper())
 
-    init {
-        fileCache = FileCache(context)
-        executorService = Executors.newFixedThreadPool(5)
-    }
-
-    fun displayImage(url: String, imageViewId: String, onLoadBitmap: (bitmap: Bitmap) -> Unit) {
+    fun displayImage(
+        url: String,
+        imageViewId: String,
+        onError: ((errorMsg: String) -> Unit)?,
+        onLoadBitmap: (bitmap: Bitmap) -> Unit
+    ) {
         imageViewIdMap[imageViewId] = url
         val bitmap = memoryCache[url]
         bitmap?.let {
             onLoadBitmap(it)
         } ?: kotlin.run {
-            queuePhoto(url, imageViewId, onLoadBitmap)
+            queuePhoto(url, imageViewId, onError, onLoadBitmap)
         }
     }
 
     suspend fun getBitmap(url: String, imageViewId: String): Bitmap? {
         return suspendCancellableCoroutine { continuation ->
-            displayImage(url, imageViewId, onLoadBitmap = {
+            displayImage(url, imageViewId, onError = null, onLoadBitmap = {
                 if (continuation.isActive) continuation.resume(it)
             })
         }
@@ -54,10 +55,11 @@ class ImageLoader(context: Context) {
     private fun queuePhoto(
         url: String,
         imageViewId: String,
+        onError: ((errorMsg: String) -> Unit)?,
         onLoadBitmap: (bitmap: Bitmap) -> Unit
     ) {
         val p = PhotoToLoad(url, imageViewId)
-        executorService.submit(PhotosLoader(p,onLoadBitmap))
+        executorService.submit(PhotosLoader(p, onError, onLoadBitmap))
     }
 
     private fun getBitmap(url: String): Bitmap? {
@@ -68,7 +70,6 @@ class ImageLoader(context: Context) {
             return b
 
         try {
-            var bitmap: Bitmap? = null
             val imageUrl = URL(url)
             val conn = imageUrl.openConnection() as HttpURLConnection
             conn.connectTimeout = 30000
@@ -79,8 +80,7 @@ class ImageLoader(context: Context) {
             copyStream(`is`, os)
             os.close()
             conn.disconnect()
-            bitmap = decodeFile(f)
-            return bitmap
+            return decodeFile(f)
         } catch (ex: Throwable) {
             ex.printStackTrace()
             if (ex is OutOfMemoryError)
@@ -117,16 +117,20 @@ class ImageLoader(context: Context) {
             stream2.close()
             return bitmap
         } catch (e: FileNotFoundException) {
+            e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
         return null
     }
 
     private inner class PhotoToLoad(var url: String, var imageViewId: String)
 
-    private inner class PhotosLoader(val photoToLoad: PhotoToLoad, val onLoadBitmap: (bitmap: Bitmap) -> Unit) : Runnable {
+    private inner class PhotosLoader(
+        val photoToLoad: PhotoToLoad,
+        val onError: ((errorMsg: String) -> Unit)?,
+        val onLoadBitmap: (bitmap: Bitmap) -> Unit
+    ) : Runnable {
 
         override fun run() {
             try {
@@ -136,7 +140,7 @@ class ImageLoader(context: Context) {
                 memoryCache.put(photoToLoad.url, bmp!!)
                 if (imageViewReused(photoToLoad))
                     return
-                val bd = BitmapDisplayer(bmp, photoToLoad, onLoadBitmap)
+                val bd = BitmapDisplayer(bmp, photoToLoad, onError, onLoadBitmap)
                 handler.post(bd)
             } catch (th: Throwable) {
                 th.printStackTrace()
@@ -153,6 +157,7 @@ class ImageLoader(context: Context) {
     private inner class BitmapDisplayer(
         val bitmap: Bitmap?,
         val photoToLoad: PhotoToLoad,
+        val onError: ((errorMsg: String) -> Unit)?,
         val onLoadBitmap: (bitmap: Bitmap) -> Unit
     ) : Runnable {
         override fun run() {
@@ -160,12 +165,12 @@ class ImageLoader(context: Context) {
                 return
             if (bitmap != null)
                 onLoadBitmap(bitmap)
-            //else
-            //TODO load placeholder
+            else
+                onError?.invoke("")
         }
     }
 
-    fun clearCache() {
+    private fun clearCache() {
         memoryCache.clear()
         fileCache.clear()
     }
@@ -182,7 +187,8 @@ class ImageLoader(context: Context) {
                         break
                     os.write(bytes, 0, count)
                 }
-            } catch (ex: Exception) {
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
 
         }
