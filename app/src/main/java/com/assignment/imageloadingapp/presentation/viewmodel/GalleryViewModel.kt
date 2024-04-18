@@ -4,10 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.assignment.imageloadingapp.Constants
 import com.assignment.imageloadingapp.Constants.SEARCH_QUERY
-import com.assignment.imageloadingapp.data.UnsplashPhoto
-import com.assignment.imageloadingapp.domain.SearchPhotosUseCase
+import com.assignment.imageloadingapp.data.pojo.UnsplashPhoto
+import com.assignment.imageloadingapp.presentation.dependancy.SearchPhotosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

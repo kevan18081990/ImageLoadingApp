@@ -42,7 +42,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.assignment.CustomImageLoader
 import com.assignment.imageloadingapp.R
-import com.assignment.imageloadingapp.data.UnsplashPhoto
+import com.assignment.imageloadingapp.data.pojo.UnsplashPhoto
 import com.assignment.imageloadingapp.presentation.viewmodel.GalleryViewModel
 import kotlinx.coroutines.flow.Flow
 import androidx.compose.runtime.getValue

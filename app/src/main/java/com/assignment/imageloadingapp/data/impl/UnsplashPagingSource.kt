@@ -1,13 +1,14 @@
-package com.assignment.imageloadingapp.data
+package com.assignment.imageloadingapp.data.impl
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.assignment.imageloadingapp.data.api.UnsplashService
+import com.assignment.imageloadingapp.data.pojo.UnsplashPhoto
+import com.assignment.imageloadingapp.data.dependancy.UnsplashServiceApi
 
 private const val UNSPLASH_STARTING_PAGE_INDEX = 1
 
 class UnsplashPagingSource(
-    private val service: UnsplashService,
+    private val service: UnsplashServiceApi,
     private val query: String
 ) : PagingSource<Int, UnsplashPhoto>() {
 

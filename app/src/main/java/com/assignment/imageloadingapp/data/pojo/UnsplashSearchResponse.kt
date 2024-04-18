@@ -1,6 +1,6 @@
-package com.assignment.imageloadingapp.data
+package com.assignment.imageloadingapp.data.pojo
 
-import com.assignment.imageloadingapp.data.UnsplashPhoto
+import com.assignment.imageloadingapp.data.pojo.UnsplashPhoto
 import com.google.gson.annotations.SerializedName
 
 data class UnsplashSearchResponse(

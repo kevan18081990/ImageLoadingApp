@@ -1,6 +1,6 @@
 package com.assignment.imageloadingapp.data.di
 
-import com.assignment.imageloadingapp.data.api.UnsplashService
+import com.assignment.imageloadingapp.data.dependancy.UnsplashServiceApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,11 +9,11 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-class NetworkModule {
+class DataModule {
 
     @Singleton
     @Provides
-    fun provideUnsplashService(): UnsplashService {
-        return UnsplashService.create()
+    fun provideUnsplashService(): UnsplashServiceApi {
+        return UnsplashServiceApi.create()
     }
 }

@@ -1,4 +1,4 @@
-package com.assignment.imageloadingapp.data
+package com.assignment.imageloadingapp.data.pojo
 
 import com.google.gson.annotations.SerializedName
 

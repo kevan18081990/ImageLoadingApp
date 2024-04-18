@@ -1,7 +1,7 @@
-package com.assignment.imageloadingapp.data.api
+package com.assignment.imageloadingapp.data.dependancy
 
 import com.assignment.imageloadingapp.BuildConfig
-import com.assignment.imageloadingapp.data.UnsplashSearchResponse
+import com.assignment.imageloadingapp.data.pojo.UnsplashSearchResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface UnsplashService {
+interface UnsplashServiceApi {
 
     @GET("search/photos")
     suspend fun searchPhotos(
@@ -23,7 +23,7 @@ interface UnsplashService {
     companion object {
         private const val BASE_URL = "https://api.unsplash.com/"
 
-        fun create(): UnsplashService {
+        fun create(): UnsplashServiceApi {
             val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
 
             val client = OkHttpClient.Builder()
@@ -35,7 +35,7 @@ interface UnsplashService {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(UnsplashService::class.java)
+                .create(UnsplashServiceApi::class.java)
         }
     }
 }
