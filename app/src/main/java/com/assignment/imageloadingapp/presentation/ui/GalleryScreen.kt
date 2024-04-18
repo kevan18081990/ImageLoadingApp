@@ -1,4 +1,4 @@
-package com.assignment.imageloadingapp.ui
+package com.assignment.imageloadingapp.presentation.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -40,10 +40,10 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.assignment.imageloadingapp.CustomImageLoader
+import com.assignment.CustomImageLoader
 import com.assignment.imageloadingapp.R
 import com.assignment.imageloadingapp.data.UnsplashPhoto
-import com.assignment.imageloadingapp.viewmodel.GalleryViewModel
+import com.assignment.imageloadingapp.presentation.viewmodel.GalleryViewModel
 import kotlinx.coroutines.flow.Flow
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue

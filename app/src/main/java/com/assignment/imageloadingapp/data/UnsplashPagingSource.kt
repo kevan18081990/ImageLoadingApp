@@ -2,7 +2,7 @@ package com.assignment.imageloadingapp.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.assignment.imageloadingapp.api.UnsplashService
+import com.assignment.imageloadingapp.data.api.UnsplashService
 
 private const val UNSPLASH_STARTING_PAGE_INDEX = 1
 

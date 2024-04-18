@@ -1,12 +1,13 @@
-package com.assignment.imageloadingapp.viewmodel
+package com.assignment.imageloadingapp.presentation.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.assignment.imageloadingapp.Constants
+import com.assignment.imageloadingapp.Constants.SEARCH_QUERY
 import com.assignment.imageloadingapp.data.UnsplashPhoto
-import com.assignment.imageloadingapp.data.UnsplashRepository
+import com.assignment.imageloadingapp.domain.SearchPhotosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,10 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GalleryViewModel @Inject constructor(
-    private val repository: UnsplashRepository
+    private val searchPhotosUseCase: SearchPhotosUseCase
 ) : ViewModel() {
-
-    private var queryString: String? = "office"
 
     private val _plantPictures = MutableStateFlow<PagingData<UnsplashPhoto>?>(null)
     val plantPictures: Flow<PagingData<UnsplashPhoto>> get() = _plantPictures.filterNotNull()
@@ -34,7 +33,7 @@ class GalleryViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                _plantPictures.value = repository.getSearchResultStream(queryString ?: "").cachedIn(viewModelScope).first()
+                _plantPictures.value = searchPhotosUseCase.execute(SEARCH_QUERY).cachedIn(viewModelScope).first()
             } catch (e: Exception) {
                 e.printStackTrace()
             }

@@ -1,6 +1,6 @@
-package com.assignment.imageloadingapp.di
+package com.assignment.imageloadingapp.data.di
 
-import com.assignment.imageloadingapp.api.UnsplashService
+import com.assignment.imageloadingapp.data.api.UnsplashService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

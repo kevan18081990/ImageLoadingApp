@@ -1,5 +1,6 @@
 package com.assignment.imageloadingapp.data
 
+import com.assignment.imageloadingapp.data.UnsplashPhoto
 import com.google.gson.annotations.SerializedName
 
 data class UnsplashSearchResponse(

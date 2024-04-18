@@ -1,4 +1,4 @@
-package com.assignment.imageloadingapp.ui.theme
+package com.assignment.imageloadingapp.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.assignment.imageloadingapp
+package com.assignment
 
 import android.content.Context
 import com.assignment.caching.ImageLoader

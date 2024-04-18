@@ -1,4 +1,4 @@
-package com.assignment.imageloadingapp
+package com.assignment.imageloadingapp.presentation
 
 import android.content.Intent
 import android.net.Uri
@@ -12,8 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.assignment.imageloadingapp.ui.GalleryScreen
-import com.assignment.imageloadingapp.ui.theme.ImageLoadingAppTheme
+import com.assignment.imageloadingapp.presentation.ui.GalleryScreen
+import com.assignment.imageloadingapp.presentation.ui.theme.ImageLoadingAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

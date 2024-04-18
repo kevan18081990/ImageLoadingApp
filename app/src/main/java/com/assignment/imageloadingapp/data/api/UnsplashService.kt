@@ -1,4 +1,4 @@
-package com.assignment.imageloadingapp.api
+package com.assignment.imageloadingapp.data.api
 
 import com.assignment.imageloadingapp.BuildConfig
 import com.assignment.imageloadingapp.data.UnsplashSearchResponse
