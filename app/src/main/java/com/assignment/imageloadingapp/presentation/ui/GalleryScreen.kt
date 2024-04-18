@@ -91,6 +91,7 @@ private fun GalleryScreen(
             when (pagingItems.loadState.refresh) {
                 is LoadState.Loading -> Unit
                 is LoadState.Error -> {
+                    pullToRefreshState.endRefresh()
                     Toast.makeText(context, context.getString(R.string.error_network), Toast.LENGTH_SHORT).show()
                 }
                 is LoadState.NotLoading -> {
