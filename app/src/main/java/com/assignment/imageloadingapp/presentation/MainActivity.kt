@@ -27,13 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    GalleryScreen(
-                        onPhotoClick = {
-
-                        },
-                        onUpClick = {
-
-                        })
+                    GalleryScreen()
                 }
             }
         }

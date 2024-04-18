@@ -52,13 +52,9 @@ import androidx.compose.ui.res.painterResource
 @Composable
 fun GalleryScreen(
     viewModel: GalleryViewModel = hiltViewModel(),
-    onPhotoClick: (UnsplashPhoto) -> Unit,
-    onUpClick: () -> Unit,
 ) {
     GalleryScreen(
         plantPictures = viewModel.plantPictures,
-        onPhotoClick = onPhotoClick,
-        onUpClick = onUpClick,
         onPullToRefresh = viewModel::refreshData,
     )
 }
@@ -67,13 +63,11 @@ fun GalleryScreen(
 @Composable
 private fun GalleryScreen(
     plantPictures: Flow<PagingData<UnsplashPhoto>>,
-    onPhotoClick: (UnsplashPhoto) -> Unit = {},
-    onUpClick: () -> Unit = {},
     onPullToRefresh: () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            GalleryTopBar(onUpClick = onUpClick)
+            GalleryTopBar()
         },
     ) { padding ->
 
@@ -109,9 +103,7 @@ private fun GalleryScreen(
                     key = pagingItems.itemKey { it.id + it.urls.thumb }
                 ) { index ->
                     val photo = pagingItems[index] ?: return@items
-                    PhotoListItem(photo = photo) {
-                        onPhotoClick(photo)
-                    }
+                    PhotoListItem(photo = photo)
                 }
             }
             PullToRefreshContainer(
@@ -125,7 +117,6 @@ private fun GalleryScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun GalleryTopBar(
-    onUpClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
@@ -137,15 +128,14 @@ private fun GalleryTopBar(
 }
 
 @Composable
-fun PhotoListItem(photo: UnsplashPhoto, onClick: () -> Unit) {
-    ImageListItem(name = photo.user.name, imageUrl = photo.urls.thumb, onClick = onClick)
+fun PhotoListItem(photo: UnsplashPhoto) {
+    ImageListItem(name = photo.user.name, imageUrl = photo.urls.thumb)
 }
 
 @Composable
-fun ImageListItem(name: String, imageUrl: String, onClick: () -> Unit) {
+fun ImageListItem(name: String, imageUrl: String) {
     val context = LocalContext.current
     Card(
-        onClick = onClick,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
         modifier = Modifier
             .padding(horizontal = dimensionResource(id = R.dimen.card_side_margin))
